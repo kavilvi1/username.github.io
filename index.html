@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Почему я тебя люблю ❤️</title>
+<title>Почему я тебя люблю, Сонюш ❤️</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -36,6 +36,21 @@
     color: #d6336c;
     margin-bottom: 30px;
     font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .name {
+    color: #ff3d7f;
+    font-style: italic;
+    font-weight: 800;
+    text-shadow: 0 2px 12px rgba(255, 61, 127, 0.35);
+    display: inline-block;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.06); }
   }
 
   .reason {
@@ -84,7 +99,6 @@
     color: #c48aa1;
   }
 
-  /* Летающие сердечки на фоне */
   .heart {
     position: fixed;
     bottom: -50px;
@@ -105,7 +119,7 @@
 <body>
 
 <div class="card">
-  <h1>Почему я тебя люблю ❤️</h1>
+  <h1>Почему я тебя люблю, <span class="name">Сонюш</span> ❤️</h1>
   <div class="reason" id="reason">Нажми на кнопку 👇</div>
   <button id="btn">Ещё причина ✨</button>
   <div class="counter" id="counter"></div>
@@ -132,17 +146,15 @@
   const btn = document.getElementById('btn');
   const counter = document.getElementById('counter');
 
-  let used = [];      // индексы уже показанных
+  let used = [];
   let currentIdx = -1;
 
   function showRandom() {
-    // если все показали — сбрасываем круг
     if (used.length >= reasons.length) {
       used = [];
       counter.textContent = "Прошёл полный круг 💕 начинаем заново";
     }
 
-    // ищем новую причину, не повторяя предыдущую
     let idx;
     do {
       idx = Math.floor(Math.random() * reasons.length);
@@ -151,7 +163,6 @@
     used.push(idx);
     currentIdx = idx;
 
-    // анимация смены
     reasonEl.classList.add('fade');
     setTimeout(() => {
       reasonEl.textContent = reasons[idx];
@@ -163,7 +174,6 @@
 
   btn.addEventListener('click', showRandom);
 
-  // фоновые сердечки
   const hearts = ['❤️', '💕', '💖', '💗', '🌸'];
   for (let i = 0; i < 12; i++) {
     const h = document.createElement('div');

@@ -186,7 +186,7 @@
     "За то, что ты умеешь делать обычный день особенным.",
     "За то, что ты моя. И это самое большое счастье.",
     "За то, как ты постепенно открыла мне душу",
-    "За те ощущения, которые я испытываю рядом с тобой",
+    "За те ощущения, которые я испытывал рядом с тобой",
     "За то, как мы были близки, даже в начале",
     "За то, как ты умеешь любить и показывать это",
     "За то, что рядом с тобой я могу быть настоящим",
@@ -203,12 +203,10 @@
   const counter = document.getElementById('counter');
 
   let used = [];
+  let finished = false;
 
   function showRandom() {
-    if (used.length >= reasons.length) {
-      used = [];
-      counter.textContent = "Прошёл полный круг 💕 начинаем заново";
-    }
+    if (finished) return; // после финала кнопка больше ничего не делает
 
     let idx;
     do {
@@ -224,6 +222,32 @@
     }, 300);
 
     counter.textContent = `${used.length} / ${reasons.length}`;
+
+    // Когда показали ВСЕ причины — показываем финал
+    if (used.length === reasons.length) {
+      setTimeout(showFinal, 1500);
+    }
+  }
+
+  function showFinal() {
+    finished = true;
+
+    reasonEl.classList.add('fade');
+    counter.textContent = "";
+
+    setTimeout(() => {
+      reasonEl.innerHTML = 'Спасибо тебе за всё.<br>Очень сильно люблю тебя ❤️';
+      reasonEl.style.fontSize = '1.6rem';
+      reasonEl.style.fontWeight = '700';
+      reasonEl.style.color = '#ff3d7f';
+      reasonEl.style.lineHeight = '1.6';
+      reasonEl.classList.remove('fade');
+
+      btn.textContent = '💗';
+      btn.style.cursor = 'default';
+      btn.disabled = true;
+      btn.style.opacity = '0.8';
+    }, 300);
   }
 
   btn.addEventListener('click', showRandom);

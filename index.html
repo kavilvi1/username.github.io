@@ -204,10 +204,12 @@
   const counter = document.getElementById('counter');
 
   let used = [];
+  let busy = false;      // защита от двойных тапов
   let finished = false;
 
   function showRandom() {
-    if (finished) return;
+    if (busy || finished) return;
+    busy = true;
 
     let idx;
     do {
@@ -217,42 +219,48 @@
     used.push(idx);
 
     reasonEl.classList.add('fade');
+    counter.textContent = `${used.length} / ${reasons.length}`;
+
     setTimeout(() => {
       reasonEl.textContent = reasons[idx];
       reasonEl.classList.remove('fade');
+      busy = false;
+
+      // Все причины показаны? → финал
+      if (used.length === reasons.length) {
+        finished = true;
+        setTimeout(showFinal, 800);
+      }
     }, 300);
-
-    counter.textContent = `${used.length} / ${reasons.length}`;
-
-    if (used.length === reasons.length) {
-      setTimeout(showFinal, 1200);
-    }
   }
 
   function showFinal() {
-    finished = true;
-
     reasonEl.classList.add('fade');
-    counter.textContent = "";
 
     setTimeout(() => {
+      // Меняем текст
       reasonEl.innerHTML = 'Спасибо тебе за всё.<br>Очень сильно люблю тебя ❤️';
       reasonEl.style.fontSize = '1.5rem';
       reasonEl.style.fontWeight = '700';
       reasonEl.style.color = '#ff3d7f';
       reasonEl.style.lineHeight = '1.6';
-      reasonEl.style.minHeight = 'auto';
       reasonEl.classList.remove('fade');
 
-      // Кнопка просто исчезает — никаких "disabled", которые могут глючить
-      btn.style.transition = 'opacity 0.5s ease';
+      // Скрываем кнопку плавно
+      btn.style.transition = 'opacity 0.4s ease';
       btn.style.opacity = '0';
       btn.style.pointerEvents = 'none';
 
-      // Прокрутка к финальному сообщению (важно для мобилы!)
-      setTimeout(() => {
-        reasonEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 100);
+      counter.textContent = '';
+
+      // Прокрутка к финалу — с задержкой и безопасно
+      try {
+        setTimeout(() => {
+          reasonEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 200);
+      } catch (e) {
+        // если scrollIntoView не поддерживается — просто ничего
+      }
     }, 300);
   }
 

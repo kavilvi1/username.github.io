@@ -206,7 +206,7 @@
   let finished = false;
 
   function showRandom() {
-    if (finished) return; // после финала кнопка больше ничего не делает
+    if (finished) return;
 
     let idx;
     do {
@@ -223,9 +223,8 @@
 
     counter.textContent = `${used.length} / ${reasons.length}`;
 
-    // Когда показали ВСЕ причины — показываем финал
     if (used.length === reasons.length) {
-      setTimeout(showFinal, 1500);
+      setTimeout(showFinal, 1200);
     }
   }
 
@@ -237,16 +236,22 @@
 
     setTimeout(() => {
       reasonEl.innerHTML = 'Спасибо тебе за всё.<br>Очень сильно люблю тебя ❤️';
-      reasonEl.style.fontSize = '1.6rem';
+      reasonEl.style.fontSize = '1.5rem';
       reasonEl.style.fontWeight = '700';
       reasonEl.style.color = '#ff3d7f';
       reasonEl.style.lineHeight = '1.6';
+      reasonEl.style.minHeight = 'auto';
       reasonEl.classList.remove('fade');
 
-      btn.textContent = '💗';
-      btn.style.cursor = 'default';
-      btn.disabled = true;
-      btn.style.opacity = '0.8';
+      // Кнопка просто исчезает — никаких "disabled", которые могут глючить
+      btn.style.transition = 'opacity 0.5s ease';
+      btn.style.opacity = '0';
+      btn.style.pointerEvents = 'none';
+
+      // Прокрутка к финальному сообщению (важно для мобилы!)
+      setTimeout(() => {
+        reasonEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
     }, 300);
   }
 

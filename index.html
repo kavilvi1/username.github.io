@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Почему я тебя люблю ❤️</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #ffd6e8 0%, #ffe9f3 50%, #ffd6e8 100%);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    padding: 20px;
+    overflow: hidden;
+  }
+
+  .card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    border-radius: 28px;
+    padding: 50px 40px;
+    max-width: 520px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(255, 105, 160, 0.25);
+    position: relative;
+    z-index: 2;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    color: #d6336c;
+    margin-bottom: 30px;
+    font-weight: 700;
+  }
+
+  .reason {
+    font-size: 1.35rem;
+    color: #4a2c3a;
+    line-height: 1.5;
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .reason.fade {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  button {
+    margin-top: 25px;
+    background: linear-gradient(135deg, #ff6ba6, #ff3d7f);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 16px 42px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(255, 61, 127, 0.4);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(255, 61, 127, 0.5);
+  }
+
+  button:active {
+    transform: scale(0.96);
+  }
+
+  .counter {
+    margin-top: 18px;
+    font-size: 0.85rem;
+    color: #c48aa1;
+  }
+
+  /* Летающие сердечки на фоне */
+  .heart {
+    position: fixed;
+    bottom: -50px;
+    font-size: 24px;
+    opacity: 0.5;
+    animation: floatUp linear infinite;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  @keyframes floatUp {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.6; }
+    100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1>Почему я тебя люблю ❤️</h1>
+  <div class="reason" id="reason">Нажми на кнопку 👇</div>
+  <button id="btn">Ещё причина ✨</button>
+  <div class="counter" id="counter"></div>
+</div>
+
+<script>
+  // ====== ЗДЕСЬ ТВОИ ПРИЧИНЫ ======
+  const reasons = [
+    "За твою улыбку, от которой у меня всё внутри переворачивается.",
+    "За то, как ты морщишь нос, когда смеёшься.",
+    "За твой голос — я могу слушать его бесконечно.",
+    "За то, что ты всегда рядом, даже когда я молчу.",
+    "За то, как ты заботишься обо мне, когда я уставший.",
+    "За твои объятия, в которых весь мир замирает.",
+    "За то, что ты понимаешь меня с полуслова.",
+    "За твои глаза — в них можно утонуть.",
+    "За то, что ты умеешь делать обычный день особенным.",
+    "За то, что ты моя. И это самое большое счастье."
+    // добавляй сколько хочешь — просто через запятую
+  ];
+  // =================================
+
+  const reasonEl = document.getElementById('reason');
+  const btn = document.getElementById('btn');
+  const counter = document.getElementById('counter');
+
+  let used = [];      // индексы уже показанных
+  let currentIdx = -1;
+
+  function showRandom() {
+    // если все показали — сбрасываем круг
+    if (used.length >= reasons.length) {
+      used = [];
+      counter.textContent = "Прошёл полный круг 💕 начинаем заново";
+    }
+
+    // ищем новую причину, не повторяя предыдущую
+    let idx;
+    do {
+      idx = Math.floor(Math.random() * reasons.length);
+    } while (used.includes(idx));
+
+    used.push(idx);
+    currentIdx = idx;
+
+    // анимация смены
+    reasonEl.classList.add('fade');
+    setTimeout(() => {
+      reasonEl.textContent = reasons[idx];
+      reasonEl.classList.remove('fade');
+    }, 300);
+
+    counter.textContent = `${used.length} / ${reasons.length}`;
+  }
+
+  btn.addEventListener('click', showRandom);
+
+  // фоновые сердечки
+  const hearts = ['❤️', '💕', '💖', '💗', '🌸'];
+  for (let i = 0; i < 12; i++) {
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+    h.style.left = Math.random() * 100 + 'vw';
+    h.style.animationDuration = (8 + Math.random() * 8) + 's';
+    h.style.animationDelay = (Math.random() * 10) + 's';
+    h.style.fontSize = (16 + Math.random() * 20) + 'px';
+    document.body.appendChild(h);
+  }
+</script>
+
+</body>
+</html>
